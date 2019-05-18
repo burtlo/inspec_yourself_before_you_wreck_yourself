@@ -1,11 +1,12 @@
 class GitRepo < Inspec.resource(1)
   name :git_repo
 
-  def initialize(path)
+  def initialize(path, options = {})
     @path = path
+    @git_path = options[:git_path] || 'git'
   end
   
-  attr_reader :path
+  attr_reader :path, :git_path
 
   def current_branch
     # 1. `git branch`
@@ -24,8 +25,28 @@ class GitRepo < Inspec.resource(1)
     #    - requires understanding of git
     #    - does not work in a detached HEAD state (returns `HEAD`) 
     
-    result = inspec.command("git branch").stdout
-    require 'pry' ; binding.pry
-    /^\*.+$/.match(result)[0]
+    result = inspec.command("cd #{path} && #{git_path} branch").stdout
+    # require 'pry' ; binding.pry
+    /^\*\s(.+)$/.match(result)[1]
+  end
+
+  def remotes
+    result = inspec.command("cd #{path} && #{git_path} remote").stdout
+    result.split
+  end
+
+  def remote(name)
+    result = inspec.command("cd #{path} && #{git_path} remote show #{name}").stdout
+    # OpenStruct.new(push_url: /^\s+Push\s+URL: (.+)$/.match(result)[1])
+    push_url = /^\s+Push\s+URL: (.+)$/.match(result)[1]
+    GitRemote.new(push_url)
+  end
+
+  class GitRemote
+    def initialize(push_url)
+      @push_url = push_url
+    end
+
+    attr_reader :push_url
   end
 end

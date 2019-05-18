@@ -94,4 +94,8 @@ class Git < Inspec.resource(1)
   
     # result.strip (lstrip, rstrip), result.chomp
   end
+
+  def repo(repo_path)
+    inspec.git_repo(repo_path, git_path: path)
+  end
 end

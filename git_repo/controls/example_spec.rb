@@ -51,6 +51,25 @@ describe git('/usr/bin/git') do
 end
 
 
-describe git_repo('.') do
-  its(:current_branch)  { should equal 'master' }
+describe git_repo('../inspec') do
+  # its(:current_branch)  { should equal 'master' } # this is a object to object comparison
+  its(:current_branch)  { should eq 'master' }
+  its(:remotes) { should include 'upstream' }
+  its(:remotes) { should include 'origin' }
+end
+
+describe git_repo('../inspec', git_path: '/usr/bin/git').remote('origin') do
+  its(:push_url) { should eq 'git@github.com:burtlo/outspec.git' }
+end
+
+describe git('/usr/bin/git').repo('../inspec').remote('origin') do
+  its(:push_url) { should eq 'git@github.com:burtlo/outspec.git' }
+end
+
+describe git_config('gitconfig') do
+  its('core.editor') { should eq 'vim' }
+end
+
+describe git_config('gitconfig') do
+  its('custom.keys.here.bowl') { should eq 'royal' }
 end

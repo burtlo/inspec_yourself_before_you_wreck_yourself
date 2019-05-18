@@ -100,12 +100,37 @@ Creating another resource requires much of the same boilerplate. This time I'll 
 > `git_repo('path').current_branch`
 > `git_repo('path').remotes should include 'origin'`
 > `git_repo('path').remote('origin').push should eq '...'`
-> `git_repo('path').remote('origin').fetch should eq '...'`
-> `git_repo('path').branch('master').commits.last` should equal the same as `origin/master`
-> `git_repo('path', git: '/usr/bin/git')`
+> Quickly demonstrate a refactor that uses a OpenStruct
 
+> Talk through the modeling of this interface
+> `git_repo('path').branch('master').commits.last` should equal the same as `origin/master`
+
+
+Specifying a git path and re-using first git resource and combining them together
+
+> `git_repo('path', git: '/usr/bin/git')`
 > `git.repo('path')...`
+
+Last example is a configuration file and this approach 
+
+* parse it using existing resources
+* parse it yourself
+* use an already existing tool to parse it.
 
 > `git_config('path')`
 > `git_config('path', git: '/ur/bin/git')`
+
+Prior to this point everyone of the methods we define on our resources were fixed. Fixed to a command or operation or an attribute. How do we start to define these methods that are dynamic based on what we find in the config?
+
+Working with a git config file is a good example that stays within our current domain and helps us explore this concept.
+
+    $ git config -f gitconfig core.editor
+    vim
+    $ git config -f gitconfig --list
+    core.editor=vim
+
 > `git.config('path').MAGIC.MAGIC.MAGIC`
+
+@reference http://ruby-doc.org/core-2.6.3/BasicObject.html#method-i-3D-3D
+
+
