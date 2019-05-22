@@ -1,7 +1,7 @@
 [user]
-	name = Albert Weisman
-	email = a.weisman@gmail.com
-	username = weiser
+	name = Lynn Frank
+	email = franklin.webber@gmail.com
+	username = burtlo
 [core]
 	editor = vim
 	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol

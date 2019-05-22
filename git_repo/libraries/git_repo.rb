@@ -38,7 +38,7 @@ class GitRepo < Inspec.resource(1)
   def remote(name)
     result = inspec.command("cd #{path} && #{git_path} remote show #{name}").stdout
     # OpenStruct.new(push_url: /^\s+Push\s+URL: (.+)$/.match(result)[1])
-    push_url = /^\s+Push\s+URL: (.+)$/.match(result)[1]
+    push_url = /^\s+Push\s+URL: (.+)$/.match(result)[1] rescue nil # NO CONNECTION ADD: rescue nil
     GitRemote.new(push_url)
   end
 
